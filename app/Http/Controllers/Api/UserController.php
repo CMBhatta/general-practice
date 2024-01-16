@@ -17,7 +17,23 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::select('email', 'name')->where('status', 1)->get();
+         if(count($users)>0){
+        //   user exits
+        $response = [
+            'message' => count($users) . 'users found',
+            'status' => 1,
+            'data' => $users,
+        ];  
+        return response()->json($response, 200);
+         } else{
+            //user doesnot exit
+            $response = [
+                'message' => count($users) . 'users not found',
+                'status' => 0,
+            ];
+            return response()->json($response, 500);
+         };
     }
 
     /**
@@ -66,7 +82,7 @@ class UserController extends Controller
             ], 500);
         }
       }
-      p($request->all());
+    //   p($request->all());
     }
 
     /**

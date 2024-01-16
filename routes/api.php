@@ -28,3 +28,4 @@ Route::get('/test',function(){
     p('working');
 });
 Route::post('user/store', [UserController::class, 'store']);
+Route::get('user/get', [UserController::class, 'index']);
