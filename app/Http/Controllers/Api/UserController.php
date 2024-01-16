@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -37,6 +41,30 @@ class UserController extends Controller
       ]);
       if($validator->fails()){
         return response()->json($validator->messages(), 400);
+      }else{
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
+        ];
+      
+        DB::beginTransaction();
+        try {
+           $user = User::create($data);
+            DB::commit();
+        } catch (Exception $e) {
+            p($e->getMessage());
+            $user = null;
+        }
+        if($user != null){
+            return response()->json([
+                'message' => 'User Registered successfully'
+            ], 200);
+        } else{
+            return response()->json([
+                'message' => 'Internal Server Error'
+            ], 500);
+        }
       }
       p($request->all());
     }
