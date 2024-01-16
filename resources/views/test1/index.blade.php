@@ -35,6 +35,9 @@
     </thead>
     <tbody>
      @foreach ($contacts as $contact)
+    {{-- @php
+       dd($contact);  
+    @endphp --}}
      <tr>
         <td>{{$contact->id}}</td>
         <td>{{$contact->name}}</td>
